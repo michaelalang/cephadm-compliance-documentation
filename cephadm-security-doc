@@ -1,0 +1,46 @@
+#!/bin/bash
+
+echo "$(for search in $(
+	for rpm in $(dnf groupinfo base | grep -v ":" |  grep -v '^$' | \
+		     awk ' { print $1 } ') 
+	do 
+		for bin in $(rpm -q --filesbypkg ${rpm} | \
+			     awk '/\/bin\// { print $2 } ') ; 
+			do 
+				basename ${bin}
+			done
+	done
+	for rpm in systemd ceph-base ceph-common firewalld iptables yum dnf util-linux
+	do 
+		for bin in $(rpm -q --filesbypkg ${rpm} | \
+				awk '/\/bin\// { print $2 } ') ;
+                        do
+				basename ${bin}
+			done
+	done 	
+	)
+do
+        # logrotate is only utilized through logrotate.d config files
+	if  echo ${search} | egrep -q -v -e "(Example|.py|.pl|^red$|logrotate|mapto)" ; then
+		#echo "find src/cephadm -type f -exec fgrep -l ${search} {} \; | grep -q src/cephadm && echo ${search}" 
+		find src/cephadm -type f -exec fgrep -B2 "'${search}'" {} \; | egrep "(call|shell|${search})" >/dev/null && echo ${search} 
+	fi
+done
+#find src/cephadm/ -type f -exec egrep -e '(call|shell)' {} \; | egrep 'call_throws\(ctx, \[' | awk ' { print $2 } ' | sed -e " s#\[##; s#'##g; s#,##g; s#_##; " | sort | uniq | egrep -v '(^$|err)'
+
+find src/cephadm/ -type f -exec fgrep "call_throws(self.ctx, ['" {} \; | awk ' { print $2 } ' | sed -e " s#\[##; s#'##g; s#,##; s#_##; " | sort | uniq
+
+find src/cephadm/ -type f -exec egrep -e 'run_shell_command' {} \; | \
+	while read cmd 
+	do
+		echo ${cmd} | awk "/run_shell_command\(f'sudo/ { print \$2 } "
+		echo ${cmd} | awk "/run_shell_command\(/ { print \$1 } " | cut -f2 -d"'"
+		echo ${cmd} | awk "/run_shell_command\(.*\|.*/ { print \$0 } " | \
+			      sed -e "s#run_shell_command('##; s#)##; s#'##g; " | \
+			      python3 -c "import sys; print('\n'.join(map(lambda x: x.strip().split(None)[0].split(None)[0], filter(lambda y: y != '', sys.stdin.read().split('|')))))"
+done
+)" | sort | uniq | \
+   egrep -ve '^(|avail_loop|def|images|local_ip|loop_devices|login|num_loops|out|rev|run_shell_command.*|x86_64)$'
+
+# call me
+# $0 | sort | uniq | egrep -ve '^(|avail_loop|def|images|local_ip|loop_devices|login|num_loops|out|rev|run_shell_command.*|x86_64)$'
