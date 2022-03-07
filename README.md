@@ -10,7 +10,8 @@ Many companies choose a none privileged user deployment for security complaince 
 # **NOTE**
 ```
 ! The output of commands is not intend to limit sudoers configuration in anyway ! 
-Full support from the community or any other Support Provider is only guaranteed by unrestricted and password less sudoers access
+Full support from the community or any other Support Provider is only guaranteed 
+by unrestricted and password less sudoers access
 ```
 
 Furthermore, the list of commands are subject to change by adding/removing functionality in the cephadm tool and therefor shall be used as report with a dedicated deadline/re-evaluation date.
@@ -20,7 +21,7 @@ Furthermore, the list of commands are subject to change by adding/removing funct
 ### prerequisits
 
 * a list of base package binaires
-** for YUM/DNF/RPM based distributions the script utilized groupinfo *base* to generate the list
+   * for YUM/DNF/RPM based distributions the script utilized groupinfo *base* to generate the list
 * a working copy of the targeted version of cephadm repository
 
 ### calling the reporting script
@@ -48,8 +49,38 @@ $ chmod 0755 ~/bin/cephadm-security-doc
 
 ```  
 $ cephadm-security-doc
-
-..
-..
-...
+/usr/sbin/sshd
+apt-get
+apt-key
+awk
+ceph
+cephadm
+chpasswd
+dd
+dnf
+docker
+docker-compose
+echo
+export
+firewall-cmd
+grep
+hostname
+journalctl
+ln
+losetup
+lvcreate
+lvs
+mknod
+mount
+pvcreate
+pvremove
+pvs
+ssh-keygen
+sudo
+systemctl
+umount
+vgcreate
+vgremove
+wipefs
+yum
 ```
