@@ -7,7 +7,7 @@ This project is intend to *record* the utilized executables from cephadm to repo
 Many companies choose a none privileged user deployment for security complaince and separation of various privileged tasks within their Organizations. Reporting the binaries used by cephadm is trying to support the Storage Teams to provide a list of commands and reports for compliance to their Security Teams.
 
 
-{color:red} *NOTE* {color}
+# **NOTE**
 ```
 ! The output of commands is not intend to limit sudoers configuration in anyway ! 
 Full support from the community or any other Support Provider is only guaranteed by unrestricted and password less sudoers access
